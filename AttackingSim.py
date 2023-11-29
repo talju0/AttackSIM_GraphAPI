@@ -42,8 +42,7 @@ def SimDataCoverage(azheader, url='https://graph.microsoft.com/v1.0/reports/secu
         sdata += 'displayName='+str((user['attackSimulationUser']['displayName']).replace(",", ""))+','
         sdata += 'email='+str(user['attackSimulationUser']['email'])+''
         sdata += '"}'
-        #send_to_splunk(sdata)
-        print (sdata+"\n")
+        send_to_splunk(sdata)
 
 def SimDataTraining(azheader, url='https://graph.microsoft.com/v1.0/reports/security/getAttackSimulationTrainingUserCoverage'):
     jsonData = requests.get(url, headers=azheader)
@@ -80,8 +79,7 @@ def SimDataTraining(azheader, url='https://graph.microsoft.com/v1.0/reports/secu
             sdata += 'displayName='+str(display_name)+','
             sdata += 'email='+str(email)+''
             sdata += '"}'
-            #send_to_splunk(sdata)
-            print (sdata+"\n")
+            send_to_splunk(sdata)
 
 def SimDataRepeatOffenders(azheader, url='https://graph.microsoft.com/v1.0/reports/security/getAttackSimulationRepeatOffenders'):
     jsonData = requests.get(url, headers=azheader)
@@ -100,21 +98,21 @@ def SimDataRepeatOffenders(azheader, url='https://graph.microsoft.com/v1.0/repor
         data += 'displayName='+str(user_data['displayName'])+','
         data += 'email='+str(user_data['email'])+''
         data += '"}'
-        #send_to_splunk(data)
-        print (data+"\n")
+        send_to_splunk(data)
 
 # run main function
 def run_main():
     # get token block & Set the headers for the API call
     access_token = get_access_token()
     az_headers = {"Authorization": f"Bearer {access_token['access_token']}", "Content-Type": "application/json"}
+    
     # Lets get top offendors
-    #SimDataCoverage(az_headers)
+    SimDataCoverage(az_headers)
 
     # Lets get top offendors - done
     SimDataTraining(az_headers)
 
     # Lets get top offendors - done
-    #SimDataRepeatOffenders(az_headers)
+    SimDataRepeatOffenders(az_headers)
 
 run_main()
